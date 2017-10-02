@@ -37,7 +37,7 @@ theta = -40:80; % Angles used for radon transform
 % Import whisker movie
 import_start = tic;
 whiskCam_frames = ReadBinaryFileToMatrix(filename,...
-    ImgParams.height, ImgParams.width, ImgParams.bitDepth);
+    ImgParams.height, ImgParams.width, ImgParams.bitDepth, 'l');
 import_time = toc(import_start);
 display(['whiskertracker_parallel: Binary file import time was ' ...
     num2str(import_time) ' seconds.']);

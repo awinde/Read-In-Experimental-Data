@@ -35,8 +35,8 @@ hem = RawData.Info.Imaged_Hemisphere;
 [RawData.Data.CBV.(ROIname)] = GetROIIntensity([fileID '_WindowCam.bin'],...
     ROIname, ImgParams, animal, hem);
 
-EvenInds = 202:2:length(RawData.Data.CBV.(ROIname));
-OddInds = 201:2:length(RawData.Data.CBV.(ROIname));
+EvenInds = 2:2:length(RawData.Data.CBV.(ROIname));
+OddInds = 1:2:length(RawData.Data.CBV.(ROIname));
 Test1 = RawData.Data.CBV.(ROIname)(OddInds);
 Test2 = RawData.Data.CBV.(ROIname)(EvenInds);
 figure; title([animal '; ' hem]);

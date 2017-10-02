@@ -1,5 +1,5 @@
-function [image_mat]=ReadBinaryFileToMatrix(filename, height, width, imgBitDepth)
-%   function [image_mat]=ReadBinaryFileToMatrix(filename, height, width, imgBitDepth)
+function [image_mat]=ReadBinaryFileToMatrix(filename, height, width, imgBitDepth, dataFormat)
+%   function [image_mat]=ReadBinaryFileToMatrix(filename, height, width, imgBitDepth, dataFormat)
 %
 %   Author: Aaron Winder
 %   Affiliation: Engineering Science and Mechanics, Penn State University
@@ -20,6 +20,14 @@ function [image_mat]=ReadBinaryFileToMatrix(filename, height, width, imgBitDepth
 %               imgBitDepth - [string] bit depth of the grabbed images. For
 %               the whisker camera, this should be 'uint8', for the CBV
 %               camera, this should be 'uint16'
+%
+%               dataFormat - [string] designates the data ordering of the
+%               camera information. This value must comply with the codes 
+%               in the fread documentation. The Dalsa 1M60 (window camera)
+%               streams data to disk in the Big-endian format 
+%               (dataFormat='b'). The Basler acA640-120gm (whisker camera)
+%               streams data to disk in the little-endian format
+%               (dataFormat='l')
 %_______________________________________________________________
 %   RETURN:
 %               image_mat - [matrix, width x height x frames]
@@ -50,7 +58,7 @@ display(['read_binary_file_to_matrix: ' num2str(nframes_to_read)...
 % PreAllocate
 image_mat = zeros(width,height,nframes_to_read,imgBitDepth);
 for n=1:nframes_to_read
-    z=fread(fid,pixels_per_frame,['*' imgBitDepth],0,'l');
+    z=fread(fid,pixels_per_frame,['*' imgBitDepth],0,dataFormat);
     image_mat(:,:,n) = reshape(z(1:pixels_per_frame),width,height);
 end
 fclose(fid);

@@ -39,7 +39,7 @@ function [ROIIntensity] = GetROIIntensity(filename, ROIname, imgParams, animal, 
 
 % Import the window camera frames
 [Frames]=ReadBinaryFileToMatrix(filename,imgParams.height,...
-    imgParams.width,imgParams.BitDepth);
+    imgParams.width,imgParams.bitDepth,'b');
 
 % Load or create a file containing the ROI location
 ROIFile = dir('*ROIs.mat');
@@ -53,15 +53,15 @@ end
 strday = ConvertDate(fileDate);
 
 [ROIExists] = CheckROI([ROIname '_' strday]);
-if not(ROIExists)
-    mask = CreateROI(Frames(:,:,1),[ROIname '_' strday],animal,hem);
-elseif ROIExists
+if ROIExists
     mask = GetROI(Frames(:,:,1),[ROIname '_' strday],animal,hem);
+else
+    mask = CreateROI(Frames(:,:,1),[ROIname '_' strday],animal,hem);
 end
 
 nFrames = size(Frames,3);
 ROIIntensity = zeros(1,nFrames);
 for frameNum = 1:nFrames
-    mask = mask.*double(Frames(:,:,frameNum));
-    ROIIntensity(frameNum) = mean(nonzeros(mask));
+    maskedWindow = mask.*double(Frames(:,:,frameNum));
+    ROIIntensity(frameNum) = mean(nonzeros(maskedWindow));
 end
